@@ -1,30 +1,59 @@
 def main():
-    palavra = '111100101'
-    palavra = '101000100111011011'
-    palavra = '1100110000111'
-    palavra = '000101100111101111011111100'
-    g_x = '101101'
-    g_x = '10101'
-    g_x = '110111'
-    g_x = '001111010010011'
-
-    print('-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-')
+    palavra = str(input("Digite a palvra inicial a ser transmitida, formada por bits 0 e 1. \n >> "))
+    while True:
+        g_x = str(input("Informe o Polinomio gerador: "))
+        if len(g_x) >= 2 and g_x[0] == '1' and g_x[len(g_x)-1] == '1':
+            break
+        else:
+            print("Polinomio gerador Invalido!!")
+    print()
     print('-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* TRANSMISSOR *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-')
-    print('-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-')
     grau = calcular_grau_g_x(g_x)
     palavra_montada = montar_palavra(grau, palavra)
     resto_final_transmissor = calcular_envio(palavra_montada, g_x, grau)
     palavra_transmitida = palavra + resto_final_transmissor
 
-    resto_final_receptor = calcular_envio(palavra_transmitida, g_x, grau)
+    print("RESTO DA DIVISAO FEITA PELO TRANSMISSOR:", resto_final_transmissor)
+    print('Palavra a ser transmitida', palavra_transmitida)
+
+    opcao = input("Gerar Erro ? 1-sim / 2-não \n>> ")
+    if opcao == '1':
+        while True:
+            local = int(input("Em qual local da palavra? no maximo: " + str(len(palavra_transmitida)) + " >> "))
+            if len(palavra_transmitida) >= local > 0:
+                palavra_transmitida = gerar_erro(palavra_transmitida, local)
+                break
+
+    palavra_recebida = palavra_transmitida
+    print()
+    print('-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* Receptor *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-')
+    grau = calcular_grau_g_x(g_x)
+    resto_final_receptor = calcular_envio(palavra_recebida, g_x, grau)
+    print("RESTO DA DIVISAO FEITA PELO RECEPTOR:", resto_final_receptor)
+
+    print()
+    print('-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* Saida final *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-')
     print("RESTO DA DIVISAO FEITA PELO TRANSMISSOR:", resto_final_transmissor)
     print("RESTO DA DIVISAO FEITA PELO RECEPTOR:", resto_final_receptor)
-    print('Palavra transmitida', palavra_transmitida)
+    print('Palavra transmitida', palavra_recebida)
 
     if resto_final_receptor == '0' * grau:
         print("A palavra chegou corretamente!")
     else:
         print('A palavra não chegou corretamente!')
+
+
+def gerar_erro(palavra_recebida, local):
+    nova_palavra_recebida = ''
+    for i in range(len(palavra_recebida)):
+        if i == local - 1:
+            if palavra_recebida[i] == '0':
+                nova_palavra_recebida += '1'
+            else:
+                nova_palavra_recebida += '0'
+        else:
+            nova_palavra_recebida += palavra_recebida[i]
+    return nova_palavra_recebida
 
 
 def calcular_envio(palavra, g_x, grau):

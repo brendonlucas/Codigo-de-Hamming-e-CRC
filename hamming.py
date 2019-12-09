@@ -13,17 +13,11 @@ def main():
     palavra_sem_bits_de_verificacao = completar_matriz(palavra_inicial)
     matriz_de_dados = fazer_matriz_de_dados(palavra_sem_bits_de_verificacao)
     bits_de_verificacao = achar_bits_validacao(palavra_sem_bits_de_verificacao)
-    # print(matriz_de_dados)
-    # print(palavra_sem_bits_de_verificacao)
-    # print(bits_de_verificacao)
     matriz_de_paridade = montar_matriz_para_paridade(bits_de_verificacao)
-    # print(matriz_de_paridade)
     preencher_matriz_de_paridade(palavra_sem_bits_de_verificacao, matriz_de_paridade, matriz_de_dados)
-    # print(matriz_de_paridade)
     paridades = calcula_paridade(matriz_de_paridade, paridade)
-    # print(paridades)
     palavra_enviada = montar_palavra_com_paridades(palavra_sem_bits_de_verificacao, paridades)
-    # print(palavra_enviada)
+
     opcao = input("Gerar Erro ? 1-sim / 2-não \n>> ")
     if opcao == '1':
         while True:
@@ -31,18 +25,14 @@ def main():
             if len(palavra_enviada) >= local > 0:
                 palavra_enviada = gerar_erro(palavra_enviada, local)
                 break
+
     print("""--------------------------------------------RECEPTOR------------------------------------------""")
     palavra_recebida = palavra_enviada
     matriz_de_dados_receptor = fazer_matriz_de_dados(palavra_recebida)
-    # print(matriz_de_dados_receptor)
     bits_de_verificacao_receptor = achar_bits_validacao(palavra_recebida)
-    # print(bits_de_verificacao_receptor)
     matriz_de_paridade_receptor = montar_matriz_para_paridade(bits_de_verificacao_receptor)
-    # print(matriz_de_paridade_receptor)
     preencher_matriz_de_paridade(palavra_recebida, matriz_de_paridade_receptor, matriz_de_dados_receptor)
-    # print(matriz_de_paridade_receptor)
     paridades_receptor = calcula_paridade(matriz_de_paridade_receptor, paridade)
-    # print(paridades_receptor)
     verifica_se_chegou_certo(palavra_recebida, bits_de_verificacao_receptor, paridades_receptor)
 
 
